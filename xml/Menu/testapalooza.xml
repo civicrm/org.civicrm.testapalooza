@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/foo/bar</path>
+    <page_callback>CRM_Testapalooza_Page_FooBar</page_callback>
+    <title>FooBar</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>
