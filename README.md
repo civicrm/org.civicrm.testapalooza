@@ -2,21 +2,21 @@
 
 ## Requirements
 
- * Install a local copy of CiviCRM
+ * Install a local copy of CiviCRM.
    * (*Strongly suggested*: Use [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild` with default file hierarchy)
  * Install [`cv`](https://github.com/civicrm/cv) somewhere in the `PATH`.
-   * (*Note*: This is bundled with the buildkit.)
- * Install [`codecept`](http://codeception.com/install)
+   * (*Note*: This is bundled with the latest buildkit.)
+ * Install [`codecept`](http://codeception.com/install) somewhere in the `PATH`.
 
 ## Create a new suite for your extension
 
 To test a CiviCRM extension with Codeception 2.x:
 
  * In your extension folder, [initialize the skeletal tests normally](http://codeception.com/quickstart).
- * In `tests/acceptance.suite.yml`, ensure that the `url` setting points to the default
+ * In `tests/acceptance.suite.yml`, ensure that the `url` points to the default
    value, "`http://localhost/myapp`". This placeholder value will be automatically adapted
    to match your CiviCRM installation.
- * Copy the file [tests/_support/CvBoot.php] to your extension.
+ * Copy the file [`tests/_support/CvBoot.php`](tests/_support/CvBoot.php) to your extension.
  * In `codeception.yml`, enable the `CvBoot` extension
 
 ```diff
