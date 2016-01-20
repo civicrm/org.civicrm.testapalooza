@@ -13,18 +13,10 @@ structure...  but it will happen... AND GET RID OF `packages/PHPUnit`!!*)
 
 ## Requirements
 
- * A local CiviCRM installation
-   * (*Strongly suggested*: Based on [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild` with default file hierarchy)
- * [`cv`](https://github.com/civicrm/cv)
-
-## Examples
-
-This README focuses on generic guidance, but the git repo also has examples for particular tools in
-alternative branches:
-
- * `codeception-2.x` (in-memory or end-to-end tests)
- * `phpunit` (in-memory or end-to-end tests)
- * `protractor` (end-to-end tests only)
+ * Install a local copy of CiviCRM
+   * (*Strongly suggested*: Use [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild` with default file hierarchy)
+ * Install [`cv`](https://github.com/civicrm/cv) somewhere in the `PATH`.
+ * Create your test-suite somewhere under the Drupal/WordPress web root.
 
 ## Mind your data
 
@@ -35,7 +27,16 @@ recommend keeping a recent DB snapshot so that you can quickly restore.
 DB snapshot by default.  You can manage it with `civibuild snapshot <mybuild>` and `civibuild
 restore <mybuild>`.)
 
-## Fast, in-process testing
+## Examples
+
+This README focuses on generic guidance, but the git repo also has examples for particular tools in
+alternative branches:
+
+ * `codeception-2.x` (in-memory or end-to-end tests)
+ * `phpunit` (in-memory or end-to-end tests)
+ * `protractor` (end-to-end tests only)
+
+## Approach: Fast, in-process testing
 
 The fastest test-suites will load Civi once -- using a "bootstrap" or "setup" function.  As long as
 the test is executed in PHP, this is pretty simple.  Copy the *Generic Wrapper* (below) and
@@ -45,7 +46,7 @@ then execute this during setup:
 eval(cv('php:boot'), TRUE);
 ```
 
-### End-to-end, multi-process testing
+### Approach: End-to-end, multi-process testing
 
 End-to-end test-suites perform a more thorough simulation of the system.  Throughout execution, the
 test will frequently issue new requests which setup/teardown the CiviCRM system (like a normal PHP
@@ -60,13 +61,16 @@ cv('api extension.install key=org.example.foobar');
 cv('api system.flush');
 
 // Get the dashboard URL
-$url = cv('url civicrm/dashboard');
+$url = cv('url "civicrm/dashboard?reset=1"');
 
 // Get credentials for DB, admin user, and demo user.
 $config = cv('show --buildkit');
 
 // Do some border-crossing evil
-$data = cv('ev \'return Civi::service("top_secret")->getHiddenData();\'');
+$hiddenData = cv('ev \'return Civi::service("top_secret")->getHiddenData();\'');
+
+// Run a helper script
+cv('scr /path/to/mysetup.php');
 ```
 
 The same design works in other languages (Javascript, Ruby, Python, bash, etal), but you'll need to
@@ -74,7 +78,8 @@ reimplement the *Generic Wrapper* in the target language.
 
 ## Generic Wrapper
 
-If the test is written in PHP, then copy this `cv` wrapper function.
+If the test is written in PHP, then copy this `cv` wrapper function.  It simply executes the `cv`
+command, checks for an error, and parses the JSON output.
 
 ```php
 /**
@@ -104,15 +109,15 @@ function cv($cmd, $raw = FALSE) {
 }
 ```
 
-For end-to-end testing in different languages (eg Javascript, Ruby), it should be easy to write
-similar wrappers for the `cv` command.
+For end-to-end testing in different languages (eg Javascript, Ruby, Python), it should be easy to
+write similar wrappers.
 
 ## Wherephar art thou executable?
 
 To be more dynamic!
 
 There is no single URL, CMS, directory structure, or username/password shared by all Civi
-developers, so we can't use boilerplate config files.  Configuring each test-suite in each
+developers, so we can't use boilerplate config files.  And configuring each test-suite in each
 extension would get pretty tedious.
 
 The `cv` command performs a lookup of the Civi configuration details which:
