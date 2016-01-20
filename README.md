@@ -21,7 +21,7 @@ structure...  but it will happen... AND GET RID OF `packages/PHPUnit`!!*)
 
 ## Mind your data
 
-Civi is DB-oriented application.  When writing tests, you'll often do crazy things to the DB.  I
+Civi is DB-oriented application.  When writing tests, you'll often do [crazy things](https://www.reddit.com/r/Jokes/comments/2m1b9b/a_code_tester_walks_into_a_bar_orders_a_beer/) to the DB.  I
 recommend keeping a recent DB snapshot so that you can quickly restore.
 
 (If you use [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild`, it stores a
