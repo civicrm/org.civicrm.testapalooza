@@ -33,9 +33,9 @@ restore <mybuild>`.)
 This README focuses on generic guidance, but the git repo also has examples for particular tools in
 alternative branches:
 
- * `codeception-2.x` (in-memory or end-to-end tests)
- * `phpunit` (in-memory or end-to-end tests)
- * `protractor` (end-to-end tests only)
+ * [`codeception-2.x`](https://github.com/civicrm/org.civicrm.testapalooza/tree/codeception-2.x) (in-memory or end-to-end tests)
+ * [`phpunit`](https://github.com/civicrm/org.civicrm.testapalooza/tree/phpunit) (in-memory or end-to-end tests)
+ * [`protractor`](https://github.com/civicrm/org.civicrm.testapalooza/tree/protractor) (end-to-end tests only)
 
 ## Approach: Fast, in-process testing
 
