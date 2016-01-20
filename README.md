@@ -44,7 +44,8 @@ the test is executed in PHP, this is pretty simple.  Copy the *Generic Wrapper* 
 then execute this once (during bootstrap):
 
 ```php
-eval(cv('php:boot'), TRUE);
+eval(cv('php:boot', TRUE));
+$GLOBALS['_CV'] = cv('show --buildkit');
 ```
 
 ### Approach: End-to-end, multi-process testing
