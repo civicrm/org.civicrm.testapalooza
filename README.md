@@ -1,4 +1,4 @@
-# CiviCRM Extension Testapalooza
+# CiviCRM Testapalooza
 
 This project demonstrates of how to write tests for CiviCRM.  The techniques here are pretty
 generic -- they ought to work with different package types (CiviCRM extensions, Drupal modules,
