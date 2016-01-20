@@ -16,6 +16,7 @@ structure...  but it will happen... AND GET RID OF `packages/PHPUnit`!!*)
  * Install a local copy of CiviCRM
    * (*Strongly suggested*: Use [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild` with default file hierarchy)
  * Install [`cv`](https://github.com/civicrm/cv) somewhere in the `PATH`.
+   * (*Note*: This is bundled with the buildkit.)
  * Create your test-suite somewhere under the Drupal/WordPress web root.
 
 ## Mind your data
