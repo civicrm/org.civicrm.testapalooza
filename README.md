@@ -37,12 +37,12 @@ Now, you will be able to use Civi's classes and services as part of the test.
 ## Run this test
 
 ```bash
-$ cd sites/all/modules/civicrm/tools/extensions
-$ git clone https://github.com/civicrm/org.civicrm.testapalooza -b codeception-2.x
-$ cd org.civicrm.testapalooza
-$ cv api extension.refresh
-$ cv api extension.install key=org.civicrm.testapalooza
-$ codecept run
+cd sites/all/modules/civicrm/tools/extensions
+git clone https://github.com/civicrm/org.civicrm.testapalooza -b codeception-2.x
+cd org.civicrm.testapalooza
+cv api extension.refresh
+cv api extension.install key=org.civicrm.testapalooza
+codecept run
 ```
 
 ## See also
