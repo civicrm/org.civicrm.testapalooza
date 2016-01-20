@@ -40,8 +40,8 @@ alternative branches:
 ## Approach: Fast, in-process testing
 
 The fastest test-suites will load Civi once -- using a "bootstrap" or "setup" function.  As long as
-the test is executed in PHP, this is pretty simple.  Copy the *Generic Wrapper* (below) and
-then execute this during setup:
+the test is executed in PHP, this is pretty simple.  Copy the *Generic Wrapper* (addendum) and
+then execute this once (during bootstrap):
 
 ```php
 eval(cv('php:boot'), TRUE);
@@ -53,7 +53,7 @@ End-to-end test-suites perform a more thorough simulation of the system.  Throug
 test will frequently issue new requests which setup/teardown the CiviCRM system (like a normal PHP
 request).
 
-You can use the `cv` helper to read configuration data and perform basic setup.
+Copy the *Generic Wrapper* (addendum); use it to read configuration data and perform basic setup.
 
 ```php
 // Configure the system
@@ -77,9 +77,12 @@ cv('scr /path/to/mysetup.php');
 The same design works in other languages (Javascript, Ruby, Python, bash, etal), but you'll need to
 reimplement the *Generic Wrapper* in the target language.
 
-## Generic Wrapper
+(Note: Each call spawns a new process. If you need to make many calls to setup configuration, consider
+putting them in a helper script that only runs once.)
 
-If the test is written in PHP, then copy this `cv` wrapper function.  It simply executes the `cv`
+## Addendum: Generic Wrapper
+
+For PHP-based tests, copy this `cv` wrapper function.  It simply executes the `cv`
 command, checks for an error, and parses the JSON output.
 
 ```php
@@ -113,7 +116,7 @@ function cv($cmd, $raw = FALSE) {
 For end-to-end testing in different languages (eg Javascript, Ruby, Python), it should be easy to
 write similar wrappers.
 
-## Wherephar art thou executable?
+## Addendum: Wherephar art thou executable?
 
 To be more dynamic!
 
