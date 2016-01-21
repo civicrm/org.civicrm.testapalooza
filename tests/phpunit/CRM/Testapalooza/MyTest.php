@@ -1,15 +1,10 @@
 <?php
 
-require_once 'CiviTest/CiviUnitTestCase.php';
-
 /**
  * FIXME
  */
-class CRM_Testapalooza_MyTest extends CiviUnitTestCase {
+class CRM_Testapalooza_MyTest extends \PHPUnit_Framework_TestCase {
   function setUp() {
-    // If your test manipulates any SQL tables, then you should truncate
-    // them to ensure a consisting starting point for all tests
-    // $this->quickCleanup(array('example_table_name'));
     parent::setUp();
   }
 
@@ -18,16 +13,10 @@ class CRM_Testapalooza_MyTest extends CiviUnitTestCase {
   }
 
   /**
-   * Test that 1^2 == 1
+   * Test that version is returned.
    */
   function testSquareOfOne() {
-    $this->assertEquals(1, 1*1);
+    $this->assertRegExp('/^([0-9\.]|alpha|beta)*$/', CRM_Utils_System::version());
   }
 
-  /**
-   * Test that 8^2 == 64
-   */
-  function testSquareOfEight() {
-    $this->assertEquals(64, 8*8);
-  }
 }
