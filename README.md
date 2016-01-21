@@ -20,7 +20,7 @@ We should be able to remove this, but it remains TODO*
 To test a CiviCRM extension with PHPUnit:
 
  * Make the folder `tests/phpunit`
- * Copy the file [`phpunit.dist.xml`](phpunit.dist.xml) to your extension
+ * Copy the file [`phpunit.xml.dist`](phpunit.xml.dist) to your extension
  * Copy the file [`tests/phpunit/bootstrap.php`](tests/phpunit/bootstrap.php) to your extension
 
 Now, you will be able to use Civi's classes and services as part of the test.
