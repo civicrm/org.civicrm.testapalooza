@@ -45,7 +45,7 @@ then execute this once (during bootstrap):
 
 ```php
 eval(cv('php:boot', TRUE));
-$GLOBALS['_CV'] = cv('show --buildkit');
+$GLOBALS['_CV'] = cv('vars:show');
 ```
 
 ### Approach: End-to-end, multi-process testing
@@ -66,7 +66,7 @@ cv('api system.flush');
 $url = cv('url "civicrm/dashboard?reset=1"');
 
 // Get credentials for DB, admin user, and demo user.
-$config = cv('show --buildkit');
+$config = cv('vars:show');
 
 // Do some border-crossing evil
 $hiddenData = cv('ev \'return Civi::service("top_secret")->getHiddenData();\'');
