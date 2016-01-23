@@ -112,7 +112,7 @@ class CvBoot extends \Codeception\Extension {
       eval(\cv('php:boot --level=' . $extConfig['level'], TRUE));
     }
 
-    self::$CONFIG = cv('show --buildkit');
+    self::$CONFIG = cv('vars:show');
   }
 
   protected function getExtConfig() {
