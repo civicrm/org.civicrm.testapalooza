@@ -30,6 +30,6 @@ function cv($cmd, $raw = FALSE) {
 }
 
 eval(cv('php:boot', TRUE));
-$GLOBALS['_CV'] = cv('show --buildkit');
+$GLOBALS['_CV'] = cv('vars:show');
 
 set_include_path(__DIR__ . PATH_SEPARATOR . get_include_path());
