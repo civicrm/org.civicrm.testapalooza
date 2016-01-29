@@ -3,6 +3,9 @@
 ## Requirements
 
  * See [the master README.md](https://github.com/civicrm/org.civicrm.testapalooza/blob/master/README.md)
+   for general requirements and setup.
+ * If you are using a custom CiviCRM installation, be sure to run `cv vars:fill`
+   as discussed in [the master README.md](https://github.com/civicrm/org.civicrm.testapalooza/blob/master/README.md).
  * Additionally, install [`phpunit`](https://phpunit.de/) somewhere in the `PATH`.
    * (*Note*: This is bundled with the latest buildkit.)
 
@@ -23,12 +26,6 @@ examples included here:
     is heavier and more opinionated, but it automatically provides a clean, normalized environment, and it includes
     lots of convenience functions (like `callAPISuccess()` and `callAPIFailure()`).
 
-## Setup
-
-If you are using a custom build and haven't already configured `cv`, then
-`cd` into your web-root and run `cv vars:fill`.  For a full discussion, see
-[the master README.md](https://github.com/civicrm/org.civicrm.testapalooza/blob/master/README.md).
-
 ## Run tests
 
 ```bash
@@ -38,6 +35,20 @@ cd org.civicrm.testapalooza
 cv api extension.refresh
 cv api extension.install key=org.civicrm.testapalooza
 phpunit
+```
+
+To run a specific test, indicate the file:
+
+```bash
+phpunit tests/phpunit/CRM/Testapalooza/LightTest.php
+```
+
+If you use `CiviUnitTestCase`, be sure to specify `CIVICRM_UF`:
+
+```bash
+export CIVICRM_UF=UnitTests
+phpunit
+phpunit tests/phpunit/CRM/Testapalooza/StdTest.php
 ```
 
 ## See also
