@@ -1,60 +1,95 @@
 # CiviCRM Testapalooza
 
 This project demonstrates of how to write tests for CiviCRM.  The techniques here are pretty
-generic -- they ought to work with different package types (CiviCRM extensions, Drupal modules,
-WordPress plugins) and different test-runners (e.g.  `phpunit`, `codeception`, `protractor`,
-`behat`).
+generic -- they ought to work with different package types (CiviCRM core, CiviCRM extensions,
+Drupal modules, WordPress plugins) and different test-runners (e.g.  `phpunit`, `codeception`,
+`protractor`, `behat`).
 
-In all cases, the tests use a local helper command, [`cv`](https://github.com/civicrm/cv), to work
-with the code or data from a local CiviCRM instance.
+Testing CiviCRM is trickier than testing a basic library -- tests may require system services (from
+Civi or the CMS), and CiviCRM developers may use different CMS's, file structures, and URLs.  This
+problem can be mitigated by creating more configuration files for each extension/test-suite, but
+that grows unwieldy with multiple extensions.
 
-(*Note: At time of writing, I have not yet updated `civicrm-core.git` to comply with this
-structure...  but it will happen... AND GET RID OF `packages/PHPUnit`!!*)
+To resolve this, we use the helper command, [`cv`](https://github.com/civicrm/cv). This command
+automatically searches the directory tree for CiviCRM and bootstraps it.
+
+In the remainder of this document, we'll discuss some general testing rules and end with links
+to specific examples.
 
 ## Requirements
 
- * Install a local copy of CiviCRM
-   * (*Strongly suggested*: Use [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild` with default file hierarchy)
- * Install [`cv`](https://github.com/civicrm/cv) somewhere in the `PATH`.
-   * (*Note*: This is bundled with the buildkit.)
- * Create your test-suite somewhere under the Drupal/WordPress web root.
+ * Working understanding of LAMP and CiviCRM installation.
+ * General familiarity with some test tool (eg `phpunit` or `codeception`).
+ * Vanilla file structure.
+   * Note: Symlink and multisite schemes *may* work, but they're probably fidgity.
+ * CiviCRM v4.7+ (via [git](http://wiki.civicrm.org/confluence/display/CRMDOC/Contributing+to+CiviCRM+using+GitHub))
+   * Note: You may be able to engineer tests to work with other versions, but this is best because:
+     * The `civicrm.settings.php` template was updated in v4.7.1 to facilitate testing.
+     * The civicrm-core test classes in v4.7.1 were refactored to be more re-usable.
+     * The civicrm-core test classes do not ship with the tarballs.
+
+## Setup: Option A: Buildkit
+
+ * Install [buildkit](https://github.com/civicrm/civicrm-buildkit/).
+ * Create a test site using [civibuild](https://github.com/civicrm/civicrm-buildkit/blob/master/doc/civibuild.md).
+
+## Setup: Option B: Manual
+
+ * Install Drupal/WordPress.
+ * Install CiviCRM v4.7+
+ * Install [`cv`](https://github.com/civicrm/cv). Ensure it is located somewhere in the `PATH`.
+ * `cd` into your Drupal/WordPress site and run `cv vars:fill`. This will create a file `~/.cv.json`.
+   * Tip: If you need to share this installation with other local users, you may specify `export CV_CONFIG=/path/to/other/file.json`
+ * Edit the file `~/.cv.json`. You may need to fill some or all of these details:
+   * Credentials for an administrative CMS user (`ADMIN_USER`, `ADMIN_PASS`, `ADMIN_EMAIL`)
+   * Credentials for a non-administrative CMS user (`DEMO_USER`, `DEMO_PASS`, `DEMO_EMAIL`)
+   * Credentials for an empty test database (`TEST_DB_DSN`)
+ * Install your favorite test-runner (e.g. [phpunit](phpunit.de), [codeception](http://codeception.com/), [behat](behat.org)).
 
 ## Mind your data
 
-Civi is DB-oriented application.  When writing tests, you'll often do [crazy things](https://www.reddit.com/r/Jokes/comments/2m1b9b/a_code_tester_walks_into_a_bar_orders_a_beer/) to the DB.  I
-recommend keeping a recent DB snapshot so that you can quickly restore.
+Civi is DB-oriented application.  When writing tests, you'll often do [crazy things](https://www.reddit.com/r/Jokes/comments/2m1b9b/a_code_tester_walks_into_a_bar_orders_a_beer/)
+to the DB.  I recommend keeping a recent DB snapshot so that you can quickly restore.
 
-(If you use [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild`, it stores a
+(If you use [civibuild](https://github.com/civicrm/civicrm-buildkit/blob/master/doc/civibuild.md), it stores a
 DB snapshot by default.  You can manage it with `civibuild snapshot <mybuild>` and `civibuild
 restore <mybuild>`.)
 
-## Examples
-
-This README focuses on generic guidance, but the git repo also has examples for particular tools in
-alternative branches:
-
- * [`codeception-2.x`](https://github.com/civicrm/org.civicrm.testapalooza/tree/codeception-2.x) (in-memory or end-to-end tests)
- * [`phpunit`](https://github.com/civicrm/org.civicrm.testapalooza/tree/phpunit) (in-memory or end-to-end tests)
- * [`protractor`](https://github.com/civicrm/org.civicrm.testapalooza/tree/protractor) (end-to-end tests only)
-
 ## Approach: Fast, in-process testing
 
-The fastest test-suites will load Civi once -- using a "bootstrap" or "setup" function.  As long as
-the test is executed in PHP, this is pretty simple.  Copy the *Generic Wrapper* (addendum) and
-then execute this once (during bootstrap):
+The fastest test-suites will load Civi one time. With most PHP test runners, you can edit the main
+config file (`phpunit.xml.dist`, `codeception.yml`, or `behat.yml`) and specify a bootstrap
+script.
+
+To perform in-process testing, create or edit your bootstrap script.  Copy the *Generic Wrapper*
+(addendum) and then execute this:
 
 ```php
-eval(cv('php:boot', TRUE));
-$GLOBALS['_CV'] = cv('vars:show');
+eval(cv('php:boot --level=settings', 'phpcode'));
 ```
+
+Evaluating this `php:boot` command will do a few things:
+
+ * Locate the closest instance of CiviCRM
+ * Register the class-loader
+ * Register the settings (`civicrm.settings.php`)
+ * Load some local configuration data to `$GLOBALS['_CV']` (such as `ADMIN_USER` and `ADMIN_PASS`).
+
+Now, you can write tests that use CiviCRM classes and functions.
+
+Tip: If your tests are likely to make a mess in the database, then you may want to run them on a
+headless test database.  You can instruct `cv` to use a headless database by either:
+
+ * Setting environment variable `CIVICRM_UF=UnitTests`
+ * Calling `cv` with `-t` (e.g. `cv php:boot --level=settings -t`)
 
 ### Approach: End-to-end, multi-process testing
 
 End-to-end test-suites perform a more thorough simulation of the system.  Throughout execution, the
-test will frequently issue new requests which setup/teardown the CiviCRM system (like a normal PHP
+test will frequently issue new requests which setup/teardown the CMS+CiviCRM systems (like a normal PHP
 request).
 
-Copy the *Generic Wrapper* (addendum); use it to read configuration data and perform basic setup.
+To use this approach, copy the *Generic Wrapper* (addendum). Call `cv` to read configuration data and perform basic setup.
 
 ```php
 // Configure the system
@@ -81,6 +116,15 @@ reimplement the *Generic Wrapper* in the target language.
 (Note: Each call spawns a new process. If you need to make many calls to setup configuration, consider
 putting them in a helper script that only runs once.)
 
+## Addendum: Examples
+
+This README focuses on generic guidance, but the git repo also has examples for particular tools in
+alternative branches:
+
+ * [`codeception-2.x`](https://github.com/civicrm/org.civicrm.testapalooza/tree/codeception-2.x) (in-memory or end-to-end tests)
+ * [`phpunit`](https://github.com/civicrm/org.civicrm.testapalooza/tree/phpunit) (in-memory or end-to-end tests)
+ * [`protractor`](https://github.com/civicrm/org.civicrm.testapalooza/tree/protractor) (end-to-end tests only)
+
 ## Addendum: Generic Wrapper
 
 For PHP-based tests, copy this `cv` wrapper function.  It simply executes the `cv`
@@ -92,25 +136,41 @@ command, checks for an error, and parses the JSON output.
  *
  * @param string $cmd
  *   The rest of the command to send.
- * @param bool $raw
- *   If TRUE, return the raw output. If FALSE, parse JSON output.
+ * @param string $decode
+ *   Ex: 'json' or 'phpcode'.
  * @return string
  *   Response output (if the command executed normally).
  * @throws \RuntimeException
  *   If the command terminates abnormally.
  */
-function cv($cmd, $raw = FALSE) {
+function cv($cmd, $decode = 'json') {
   $cmd = 'cv ' . $cmd;
   $descriptorSpec = array(0 => array("pipe", "r"), 1 => array("pipe", "w"), 2 => STDERR);
   $env = $_ENV + array('CV_OUTPUT' => 'json');
   $process = proc_open($cmd, $descriptorSpec, $pipes, __DIR__, $env);
   fclose($pipes[0]);
-  $bootCode = stream_get_contents($pipes[1]);
+  $result = stream_get_contents($pipes[1]);
   fclose($pipes[1]);
   if (proc_close($process) !== 0) {
-    throw new RuntimeException("Command failed ($cmd)");
+    throw new RuntimeException("Command failed ($cmd):\n$result");
   }
-  return $raw ? $bootCode : json_decode($bootCode, 1);
+  switch ($decode) {
+    case 'raw':
+      return $result;
+
+    case 'phpcode':
+      // If the last output is /*PHPCODE*/, then we managed to complete execution.
+      if (substr(trim($result), 0, 12) !== "/*BEGINPHP*/" || substr(trim($result), -10) !== "/*ENDPHP*/") {
+        throw new \RuntimeException("Command failed ($cmd):\n$result");
+      }
+      return $result;
+
+    case 'json':
+      return json_decode($result, 1);
+
+    default:
+      throw new RuntimeException("Bad decoder format ($decode)");
+  }
 }
 ```
 
