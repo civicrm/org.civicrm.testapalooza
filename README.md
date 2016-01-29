@@ -1,18 +1,9 @@
 # CiviCRM Testapalooza: phpunit
 
-# **FIXME**
-
-*At time of writing, civicrm-packages.git has a copy of PHPUnit, and
-it conflicts with any other copy of PHPUnit when running tests.
-We should be able to remove this, but it remains TODO*
-
 ## Requirements
 
- * Install a local copy of CiviCRM.
-   * (*Strongly suggested*: Use [buildkit](https://github.com/civicrm/civicrm-buildkit/)'s `civibuild` with default file hierarchy)
- * Install [`cv`](https://github.com/civicrm/cv) somewhere in the `PATH`.
-   * (*Note*: This is bundled with the latest buildkit.)
- * Install [`phpunit`](https://phpunit.de/) somewhere in the `PATH`.
+ * See [the master README.md](https://github.com/civicrm/org.civicrm.testapalooza/blob/master/README.md)
+ * Additionally, install [`phpunit`](https://phpunit.de/) somewhere in the `PATH`.
    * (*Note*: This is bundled with the latest buildkit.)
 
 ## Create a new suite for your extension
@@ -23,13 +14,22 @@ To test a CiviCRM extension with PHPUnit:
  * Copy the file [`phpunit.xml.dist`](phpunit.xml.dist) to your extension
  * Copy the file [`tests/phpunit/bootstrap.php`](tests/phpunit/bootstrap.php) to your extension
 
-Now, you will be able to use Civi's classes and services as part of the test.
+Now, you will be able to use Civi's classes and services as part of the test. There are two
+examples included here:
 
-Note: When creating tests, please extend `\PHPUnit_Framework_TestCase`
-instead of `CiviUnitTestCase`.  Although `CiviUnitTestCase` is pretty
-powerful, it's also pretty heavy and opinionated.
+  * [`CRM_Testapalooza_LightTest`](tests/phpunit/CRM/Testapalooza/LightTest.php) extends `PHPUnit_Framework_TestCase`.
+    It's fairly thin and lightweight, but you have to handle most setup/cleanup yourself.
+  * [`CRM_Testapalooza_StdTest`](tests/phpunit/CRM/Testapalooza/StdTest.php) extends `CiviUnitTestCase`; it
+    is heavier and more opinionated, but it automatically provides a clean, normalized environment, and it includes
+    lots of convenience functions (like `callAPISuccess()` and `callAPIFailure()`).
 
-## Run this test
+## Setup
+
+If you are using a custom build and haven't already configured `cv`, then
+`cd` into your web-root and run `cv vars:fill`.  For a full discussion, see
+[the master README.md](https://github.com/civicrm/org.civicrm.testapalooza/blob/master/README.md).
+
+## Run tests
 
 ```bash
 cd sites/all/modules/civicrm/tools/extensions
