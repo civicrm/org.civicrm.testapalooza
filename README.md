@@ -113,8 +113,12 @@ cv('scr /path/to/mysetup.php');
 The same design works in other languages (Javascript, Ruby, Python, bash, etal), but you'll need to
 reimplement the *Generic Wrapper* in the target language.
 
-(Note: Each call spawns a new process. If you need to make many calls to setup configuration, consider
-putting them in a helper script that only runs once.)
+To learn more about commands in `cv`, simply run `cv` via CLI. You can try out
+commands directly (eg `cv url "civicrm/dashboard?reset=1"`), get a list of
+commands (`cv list`), or read help for specific commands (eg `cv url -h`).
+
+(Note: Each call to `cv` spawns a new process.  If you need to make many calls to setup
+configuration, consider putting them in a helper script to run them en masse.)
 
 ## Addendum: Examples
 
