@@ -185,26 +185,3 @@ function cv($cmd, $decode = 'json') {
 
 For end-to-end testing in different languages (eg Javascript, Ruby, Python), it should be easy to
 write similar wrappers.
-
-## Addendum: Wherephar art thou executable?
-
-To be more dynamic!
-
-There is no single URL, CMS, directory structure, or username/password shared by all Civi
-developers, so we can't use boilerplate config files.  And configuring each test-suite in each
-extension would get pretty tedious.
-
-The `cv` command performs a lookup of the Civi configuration details which:
-
- * Scans the directory tree to find CMS+Civi.
- * Accepts options through environment variables (`CIVICRM_SETTINGS`).
- * Works with Drupal-based and WordPress-based installations. (Maybe Joomla... haven't tested.)
- * Can be used from any programming language.
-
-It has one major limitation -- the test and Civi site should be on the same system.  For in-process
-testing, this is a strong, logical requirement.  For end-to-end testing, it's a weak requirement;
-patch-welcome if you have a way to resolve.
-
-If we didn't want multiple language support (PHP-only), then one could do this differently -- e.g. instead
-of an executable `phar`, one could do a PHP library. However, maintaining/upgrading a bootstrap library
-across all extensions would suck. It's easier to upgrade `cv` when it's packaged as a standalone command.
