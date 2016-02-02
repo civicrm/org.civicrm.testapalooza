@@ -35,7 +35,7 @@ to specific examples.
 
 ## Setup: Option B: Manual
 
- * Install Drupal/WordPress.
+ * Install Drupal/WordPress. (Backdrop/Joomla may also work - but not tested as much.)
  * Install CiviCRM v4.7+
  * Install [`cv`](https://github.com/civicrm/cv). Ensure it is located somewhere in the `PATH`.
  * `cd` into your Drupal/WordPress site and run `cv vars:fill`. This will create a file `~/.cv.json`.
@@ -61,8 +61,13 @@ The fastest test-suites will load Civi one time. With most PHP test runners, you
 config file (`phpunit.xml.dist`, `codeception.yml`, or `behat.yml`) and specify a bootstrap
 script.
 
-To perform in-process testing, create or edit your bootstrap script.  Copy the *Generic Wrapper*
-(addendum) and then execute this:
+To perform in-process testing, create or edit your bootstrap script and include this:
+
+```php
+eval(`cv php:boot`);
+```
+
+To get better error reporting, copy the *Generic Wrapper* (addendum) and use:
 
 ```php
 eval(cv('php:boot --level=settings', 'phpcode'));
@@ -72,8 +77,8 @@ Evaluating this `php:boot` command will do a few things:
 
  * Locate the closest instance of CiviCRM
  * Register the class-loader
- * Register the settings (`civicrm.settings.php`)
- * Load some local configuration data to `$GLOBALS['_CV']` (such as `ADMIN_USER` and `ADMIN_PASS`).
+ * Read the settings (`civicrm.settings.php`)
+ * Put some local configuration data in `$GLOBALS['_CV']` (such as `ADMIN_USER` and `ADMIN_PASS`).
 
 Now, you can write tests that use CiviCRM classes and functions.
 
