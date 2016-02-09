@@ -32,7 +32,7 @@ phpunit
 To run a specific test, indicate the file:
 
 ```bash
-phpunit tests/phpunit/CRM/Testapalooza/LightTest.php
+phpunit tests/phpunit/CRM/Testapalooza/MyHeadlessTest.php
 ```
 
 ## Create a new suite for your extension
@@ -43,14 +43,16 @@ To test a new CiviCRM extension with PHPUnit:
  * Copy the file [`phpunit.xml.dist`](phpunit.xml.dist) to your extension
  * Copy the file [`tests/phpunit/bootstrap.php`](tests/phpunit/bootstrap.php) to your extension
 
-Now, you will be able to use Civi's classes and services as part of the test. There are two
+Now, you will be able to use Civi's classes and services as part of the test. There are a few
 examples included here:
 
-  * [`CRM_Testapalooza_LightTest`](tests/phpunit/CRM/Testapalooza/LightTest.php) extends `PHPUnit_Framework_TestCase`.
-    It's fairly thin and lightweight, but you have to handle most setup/cleanup yourself.
-  * [`CRM_Testapalooza_StdTest`](tests/phpunit/CRM/Testapalooza/StdTest.php) extends `CiviUnitTestCase`; it
-    is heavier and more opinionated, but it automatically provides a clean, normalized environment, and it includes
-    lots of convenience functions (like `callAPISuccess()` and `callAPIFailure()`).
+  * [`CRM_Testapalooza_MyHeadlessTest`](tests/phpunit/CRM/Testapalooza/MyHeadlessTest.php) extends `PHPUnit_Framework_TestCase`.
+    The base `TestCase` doesn't provide much help with setup or teardown, but you can mix-in extra support via `Civi\Test\HeadlessInterface`,
+    `Civi\Test\HookInterface`, `Civi\Test\TransactionalInterface`.
+  * [`CRM_Testapalooza_MyCoreStyleTest`](tests/phpunit/CRM/Testapalooza/MyCoreStyleTest.php) extends `CiviUnitTestCase`. It
+    provides many more features out-of-the-box, but its larger surface-area makes it more likely to have unexpected edge-cases
+    and future changes.
+  * [`CRM_Testapalooza_MyEndToEndTest`](tests/phpunit/CRM/Testapalooza/MyEndToEndTest.php) extends `PHPUnit_Framework_TestCase`.
 
 ## See also
 

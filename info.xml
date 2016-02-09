@@ -24,4 +24,7 @@
   <civix>
     <namespace>CRM/Testapalooza</namespace>
   </civix>
+  <classloader>
+    <psr4 prefix="Civi\Testapalooza\" path="src"  />
+  </classloader>
 </extension>

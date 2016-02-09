@@ -2,9 +2,7 @@
 
 ini_set('memory_limit', '2G');
 ini_set('safe_mode', 0);
-
-set_include_path(__DIR__ . PATH_SEPARATOR . get_include_path());
-eval(cv('php:boot --level=settings', TRUE));
+eval(cv('php:boot --level=classloader', 'phpcode'));
 
 /**
  * Call the "cv" command.
