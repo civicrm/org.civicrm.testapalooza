@@ -19,7 +19,7 @@ class CRM_Testapalooza_MyCoreStyleTest extends CiviUnitTestCase
   implements \Civi\Test\HeadlessInterface {
 
   public function setUpHeadless() {
-    CiviTester::headless()->extDir(__DIR__)->apply();
+    Civi\Test::headless()->installMe(__DIR__)->apply();
   }
 
   public function setUp() {

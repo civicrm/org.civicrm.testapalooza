@@ -2,6 +2,7 @@
 
 use \Civi\Test\HookInterface;
 use \Civi\Test\HeadlessInterface;
+use \Civi\Test\TransactionalInterface;
 
 /**
  * This is a lightweight unit-tested based on PHPUnit_Framework_TestCase.
@@ -14,11 +15,11 @@ use \Civi\Test\HeadlessInterface;
  * @group headless
  */
 class CRM_Testapalooza_MyHeadlessTest extends \PHPUnit_Framework_TestCase
-  implements HeadlessInterface, HookInterface {
+  implements HeadlessInterface, HookInterface, TransactionalInterface {
 
   public function setUpHeadless() {
-    return CiviTester::headless()
-      ->extDir(__DIR__)
+    return Civi\Test::headless()
+      ->installMe(__DIR__)
       ->apply();
   }
 
@@ -37,6 +38,18 @@ class CRM_Testapalooza_MyHeadlessTest extends \PHPUnit_Framework_TestCase
     $this->assertRegExp('/^([0-9\.]|alpha|beta)*$/', CRM_Utils_System::version());
   }
 
+  /**
+   * Test that we can add some data to the database.
+   */
+  public function testSomeData() {
+    $event = CRM_Core_DAO::createTestObject('CRM_Event_DAO_Event');
+    $this->assertTrue(is_numeric($event->id));
+    // Note: We declared TransactionalInterface, so this data will be rolled back automatically.
+  }
+
+  /**
+   * Test that a page-runner produces expected output.
+   */
   public function testPageOutput() {
     ob_start();
     $p = new CRM_Testapalooza_Page_FooBar();
@@ -47,6 +60,9 @@ class CRM_Testapalooza_MyHeadlessTest extends \PHPUnit_Framework_TestCase
     $this->assertRegExp(';Testapalooza!!;', $content);
   }
 
+  /**
+   * Test that classes from the extension are available.
+   */
   public function testExtClassLoaders() {
     $this->assertEquals(CRM_Testapalooza_FooBar::double(3), 6);
     $this->assertEquals(\Civi\Testapalooza\FooBar::square(4), 16);
