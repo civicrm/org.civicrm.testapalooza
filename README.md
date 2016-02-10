@@ -12,28 +12,32 @@
 ## Run the examples
 
 ```bash
+# Download the extension
 cd sites/all/modules/civicrm/tools/extensions
 git clone https://github.com/civicrm/org.civicrm.testapalooza -b phpunit
 cd org.civicrm.testapalooza
 cv api extension.refresh
 cv api extension.install key=org.civicrm.testapalooza
-phpunit
+
+# Run all the headless tests
+phpunit4 --group headless
+
+# Run all the end-to-end tests
+phpunit4 --group e2e
+
+# Run a specific test
+phpunit4 tests/phpunit/CRM/Testapalooza/MyHeadlessTest.php
 ```
 
-Some of the tests may fail with an error about `CIVICRM_UF`.  These tests
-are designed to run on a separate, headless database -- and they fail if you
-try to run them on a live database.  To use the headless database, specify:
+Note that Testapalooza includes examples of both headless tests
+as well as end-to-end tests. These manage the CiviCRM environment very
+differently, e.g.
 
-```bash
-export CIVICRM_UF=UnitTests
-phpunit
-```
+ * *Headless (in-process)*: Boot CiviCRM once with the dummy CMS (`CIVICRM_UF=UnitTests`). Teardown/refill the test DB as needed.
+ * *End-to-end (E2E; multi-process)*: Use the live CiviCRM installation, as currently configured.
 
-To run a specific test, indicate the file:
-
-```bash
-phpunit tests/phpunit/CRM/Testapalooza/MyHeadlessTest.php
-```
+If you try to run headless and E2E tests at the same time, one test or
+another will crash.
 
 ## Create a new suite for your extension
 
@@ -47,12 +51,12 @@ Now, you will be able to use Civi's classes and services as part of the test. Th
 examples included here:
 
   * [`CRM_Testapalooza_MyHeadlessTest`](tests/phpunit/CRM/Testapalooza/MyHeadlessTest.php) extends `PHPUnit_Framework_TestCase`.
+    This example runs in a headless environment, where you can freely destroy and recreate the schema.
     The base `TestCase` doesn't provide much help with setup or teardown, but you can mix-in extra support via `Civi\Test\HeadlessInterface`,
     `Civi\Test\HookInterface`, `Civi\Test\TransactionalInterface`.
-  * [`CRM_Testapalooza_MyCoreStyleTest`](tests/phpunit/CRM/Testapalooza/MyCoreStyleTest.php) extends `CiviUnitTestCase`. It
-    provides many more features out-of-the-box, but its larger surface-area makes it more likely to have unexpected edge-cases
-    and future changes.
   * [`CRM_Testapalooza_MyEndToEndTest`](tests/phpunit/CRM/Testapalooza/MyEndToEndTest.php) extends `PHPUnit_Framework_TestCase`.
+    This example runs in a live Civi+CMS environment. You should exercise greater caution to ensure that the database
+    remains viable and correct, and you may issue calls over HTTP or to the CMS.
 
 ## See also
 
