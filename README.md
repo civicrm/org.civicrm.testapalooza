@@ -5,9 +5,9 @@ generic -- they ought to work with different package types (CiviCRM core, CiviCR
 Drupal modules, WordPress plugins) and different test-runners (e.g.  `phpunit`, `codeception`,
 `protractor`, `behat`).
 
-Testing CiviCRM is trickier than testing a basic library -- tests may require system services (from
+Testing CiviCRM is trickier than testing a basic library -- tests may involve system services (from
 Civi or the CMS), and CiviCRM developers may use different CMS's, file structures, and URLs.  This
-problem can be mitigated by creating more configuration files for each extension/test-suite, but
+problem can be mitigated by creating more configuration files for each extension/test-suite/installation, but
 that grows unwieldy with multiple extensions.
 
 To resolve this, we use the helper command, [`cv`](https://github.com/civicrm/cv). This command
@@ -21,12 +21,12 @@ to specific examples.
  * Working understanding of LAMP and CiviCRM installation.
  * General familiarity with some test tool (eg `phpunit` or `codeception`).
  * Vanilla file structure.
-   * Note: Symlink and multisite schemes *may* work, but they're probably fidgity.
+   * For example, in Drupal use `sites/all/modules`; in WP, use `wp-content`. Avoid symlinks. Use single-site. More sophisticated schemes *may* work, but they haven't been tested. You may need to patch `cv` to support other schemes.
  * CiviCRM v4.7+ (via [git](http://wiki.civicrm.org/confluence/display/CRMDOC/Contributing+to+CiviCRM+using+GitHub))
    * Note: You may be able to engineer tests to work with other versions, but this is best because:
      * The `civicrm.settings.php` template was updated in v4.7.1 to facilitate testing.
-     * The civicrm-core test classes in v4.7.1 were refactored to be more re-usable.
-     * The civicrm-core test classes do not ship with the tarballs.
+     * The `civicrm-core` test classes in v4.7.1 were refactored to be more re-usable.
+     * The `civicrm-core` test classes do not ship with the tarballs.
 
 ## Setup: Option A: Buildkit
 
