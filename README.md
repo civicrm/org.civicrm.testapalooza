@@ -57,9 +57,9 @@ restore <mybuild>`.)
 
 ## Techniques
 
- * Bootstrap: [Fast, in-process testing](in-process.md) ("Headless") - The fastest test-suites will load Civi one time, but they provide a less thorough simulation.
- * Bootstrap: [End-to-end, multi-process testing](e2e.md) ("E2E") - The most realistic test-suites execute tests in a fully configured Civi+CMS installation, but they incur greater performance penalties.
- * Data management: [Civi\Test and Transactions](civi-test.md) - Declare the configuration in which tests should run.
+ * **Bootstrap**: [Fast, in-process testing](in-process.md) ("Headless") - The fastest test-suites will load Civi one time, but they provide a less thorough simulation.
+ * **Bootstrap**: [End-to-end, multi-process testing](e2e.md) ("E2E") - The most realistic test-suites execute tests in a fully configured Civi+CMS installation, but they incur greater performance penalties.
+ * **Data management**: [Civi\Test and Transactions](civi-test.md) - Declare the configuration in which tests should run.
 
 ## Examples
 
