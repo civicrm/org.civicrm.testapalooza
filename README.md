@@ -52,11 +52,11 @@ examples included here:
 
   * [`CRM_Testapalooza_MyHeadlessTest`](tests/phpunit/CRM/Testapalooza/MyHeadlessTest.php) extends `PHPUnit_Framework_TestCase`.
     This example runs in a headless environment, where you can freely destroy and recreate the schema.
-    The base `TestCase` doesn't provide much help with setup or teardown, but you can mix-in extra support via `Civi\Test\HeadlessInterface`,
-    `Civi\Test\HookInterface`, `Civi\Test\TransactionalInterface`.
+    The base `TestCase` doesn't provide much help with setup or teardown, but you can mix-in extra support via [`Civi\Test\HeadlessInterface`](https://github.com/civicrm/civicrm-core/blob/master/Civi/Test/HeadlessInterface.php),
+    [`Civi\Test\HookInterface`](https://github.com/civicrm/civicrm-core/blob/master/Civi/Test/HookInterface.php), [`Civi\Test\TransactionalInterface`](https://github.com/civicrm/civicrm-core/blob/master/Civi/Test/TransactionalInterface.php).
   * [`CRM_Testapalooza_MyEndToEndTest`](tests/phpunit/CRM/Testapalooza/MyEndToEndTest.php) extends `PHPUnit_Framework_TestCase`.
     This example runs in a live Civi+CMS environment. You should exercise greater caution to ensure that the database
-    remains viable and correct, and you may issue calls over HTTP or to the CMS.
+    remains viable and correct, and you may issue calls over HTTP or to the CMS. This implements [`Civi\Test\EndToEndInterface`](https://github.com/civicrm/civicrm-core/blob/master/Civi/Test/EndToEndInterface.php).
 
 ## See also
 
