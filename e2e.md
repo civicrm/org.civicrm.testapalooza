@@ -4,7 +4,7 @@ End-to-end test-suites perform a more thorough simulation of the system.  Throug
 test will frequently issue new requests which setup/teardown the CMS+CiviCRM systems (like a normal PHP
 request).
 
-To use this approach, copy the [generic wrapper](wrapper.php). Call `cv` to read configuration data and perform basic setup.
+The [`cv`](https://github.com/civicrm/cv) shell command allows you to read configuration data (e.g. `cv vars:show`) and perform basic setup (e.g. `cv api setting.create foo=bar`). To use it as part of an E2E test, create a generic wrapper ([PHP example](wrapper.php)) and then send commands like:
 
 ```php
 // Configure the system
@@ -25,7 +25,7 @@ $hiddenData = cv('ev \'return Civi::service("top_secret")->getHiddenData();\'');
 cv('scr /path/to/mysetup.php');
 ```
 
-The same design works in other languages (Javascript, Ruby, Python, bash, etal), but you'll need to
+The same design should work in any language (Javascript, Ruby, Python, etal), but you'll need to
 reimplement the generic wrapper in the target language.
 
 To learn more about commands in `cv`, simply run `cv` via CLI. You can try out
