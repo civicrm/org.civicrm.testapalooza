@@ -6,12 +6,14 @@ Drupal modules, WordPress plugins) and different test-runners (e.g.  `phpunit`, 
 `protractor`, `behat`).
 
 Testing CiviCRM is trickier than testing a basic library -- tests may involve system services (from
-Civi or the CMS), and CiviCRM developers may use different CMS's, file structures, and URLs.  This
-problem can be mitigated by creating more configuration files for each extension/test-suite/installation, but
-that grows unwieldy with multiple extensions.
+Civi or the CMS), and CiviCRM administrators may use different CMS's, file structures, and URLs.  One
+way to mitigate this would be creating configuration files (e.g. each extension could have its own
+copy of `codeception.yml` or `karma.conf.js` which must be fine-tuned with file-paths and URLs
+for a local CiviCRM). Unfortunately, managing those configuration files grows unwieldy with multiple extensions.
 
 To resolve this, we use the helper command, [`cv`](https://github.com/civicrm/cv). This command
-automatically searches the directory tree for CiviCRM and bootstraps it.
+automatically searches for CiviCRM and bootstraps it. It can be integrated into your extension tests,
+enabling them to execute without custom configuration files.
 
 In the remainder of this document, we'll discuss some general testing rules and end with links
 to specific examples.
