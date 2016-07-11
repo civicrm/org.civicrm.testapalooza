@@ -9,11 +9,12 @@ Testing CiviCRM is trickier than testing a basic library -- tests may involve sy
 Civi or the CMS), and CiviCRM administrators may use different CMS's, file structures, and URLs.  One
 way to mitigate this would be creating configuration files (e.g. each extension could have its own
 copy of `codeception.yml` or `karma.conf.js` which must be fine-tuned with file-paths and URLs
-for a local CiviCRM). Unfortunately, managing those configuration files grows unwieldy with multiple extensions.
+for a local CiviCRM). Unfortunately, if you have a dozen extensions with tests, creating those
+custom configuration files becomes unwieldy.
 
 To resolve this, we use the helper command, [`cv`](https://github.com/civicrm/cv). This command
-automatically searches for CiviCRM and bootstraps it. It can be integrated into your extension tests,
-enabling them to execute without custom configuration files.
+automatically searches for CiviCRM and bootstraps it. It can be integrated into your extension tests --
+enabling them to lookup CiviCRM folders and URLs without custom configuration files.
 
 In the remainder of this document, we'll discuss some general testing rules and end with links
 to specific examples.
@@ -22,13 +23,13 @@ to specific examples.
 
  * Working understanding of LAMP and CiviCRM installation.
  * General familiarity with some test tool (eg `phpunit` or `codeception`).
- * Vanilla file structure.
-   * For example, in Drupal use `sites/all/modules`; in WP, use `wp-content`. Avoid symlinks. Use single-site. More sophisticated schemes *may* work, but they haven't been tested. You may need to patch `cv` to support other schemes.
- * CiviCRM v4.7+ (via [git](http://wiki.civicrm.org/confluence/display/CRMDOC/Contributing+to+CiviCRM+using+GitHub))
+ * CiviCRM v4.7.1+ (via [git](http://wiki.civicrm.org/confluence/display/CRMDOC/Contributing+to+CiviCRM+using+GitHub))
    * Note: You may be able to engineer tests to work with other versions, but this is best because:
      * The `civicrm.settings.php` template was updated in v4.7.1 to facilitate testing.
      * The `civicrm-core` test classes in v4.7.1 were refactored to be more re-usable.
      * The `civicrm-core` test classes do not ship with the tarballs.
+ * Recommended: Vanilla file structure.
+   * For example, in Drupal use `sites/all/modules`; in WP, use `wp-content`. Avoid symlinks. Use single-site. More sophisticated schemes *may* work, but they haven't been tested. See also: [Stackexchange: "Failed to locate civicrm.settings.php"](http://civicrm.stackexchange.com/questions/12732/civix-reports-failed-to-locate-civicrm-settings-php)
 
 ## Setup: Option A: Buildkit
 
