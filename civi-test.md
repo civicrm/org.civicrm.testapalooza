@@ -3,12 +3,13 @@
 Civi is a heavily customizable system, so many of the configuration details
 (like activity-type-names and membership-type-id) are stored in a mutable
 database (rather than relatively stable PHP code). This creates a challenge
-in writing tests -- we need to balance competing needs to:
+in writing tests -- how do we set the data during the test? We need to
+balance competing needs to:
 
- * Define the test data precisely and reproducibly
- * Easily write the definition of the test data
- * Explore a thorough (or at least representative) range of scenarios
- * Execute tests quickly
+ * Define the test data precisely (i.e. reproducible data which produces consistent results whenever the test runs)
+ * Easily write the definition of the test data (i.e. without manually defining 100+ records)
+ * Explore a thorough (or at least representative) range of scenarios (i.e. allowing variations in the dataset)
+ * Execute tests quickly (i.e. without resetting the entire DB frequently)
 
 It's hard to proscribe a single formula for testing all subsystems and
 extensions -- the balance of these concerns weighs differently on, say, an
